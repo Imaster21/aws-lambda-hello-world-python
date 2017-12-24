@@ -1,0 +1,28 @@
+version: 0.1
+
+phases:
+  pre_build:
+    commands:
+      - pip --version
+      - python --version
+      - mkdir dist artifacts
+
+  build:
+    commands:
+      - pip install -r requirements.txt -t dist
+      - PYTHONPATH=dist python -m unittest discover tests
+      - cp -r main.py src dist/
+      - chmod -R a+rwX dist
+      - "aws cloudformation package --template-file .ci/service.yml --s3-prefix build --s3-bucket $S3_BUCKET --output-template-file artifacts/template.yml"
+
+
+  post_build:
+    commands:
+      - echo "Listing artifacts..."
+      - "ls -lR artifacts/"
+
+artifacts:
+  type: zip
+  discard-paths: yes
+  files:
+    - artifacts/**/*
