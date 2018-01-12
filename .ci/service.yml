@@ -13,11 +13,11 @@ Resources:
       Runtime: python3.6
       CodeUri: ../dist
       Timeout: 10
-      Role: !<!GetAtt> FunctionExecutionRole.Arn
+      Role: !GetAtt FunctionExecutionRole.Arn
   FunctionExecutionRole:
     Type: 'AWS::IAM::Role'
     Properties:
-      Path: !<!Sub> '/${ Name }/'
+      Path: !Sub '/${ Name }/'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -39,5 +39,5 @@ Resources:
   FunctionLogGroup:
     Type: 'AWS::Logs::LogGroup'
     Properties:
-      LogGroupName: !<!Sub> '/aws/lambda/${ Function}'
+      LogGroupName: !Sub '/aws/lambda/${ Function}'
       RetentionInDays: 3
